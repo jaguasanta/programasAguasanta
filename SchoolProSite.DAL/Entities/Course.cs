@@ -1,18 +1,14 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using SchoolProSite.DAL.Core;
 
 namespace SchoolProSite.DAL.Entities
 {
     public partial class Course : BaseEntity
     {
-        public Course()
-        {
-            StudentGrades = new HashSet<StudentGrade>();
-            People = new HashSet<Person>();
-        }
-
-        public int CourseId { get; set; }
-        public string Title { get; set; }
+        [Key]
+        public int CourseID { get; set; }
+        public string? Title { get; set; }
         public int Credits { get; set; }
         public int DepartmentId { get; set; }
       

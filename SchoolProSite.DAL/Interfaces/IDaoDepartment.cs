@@ -1,5 +1,4 @@
-﻿
-using SchoolProSite.DAL.Entities;
+﻿using SchoolProSite.DAL.Entities;
 
 namespace SchoolProSite.DAL.Interfaces
 {
@@ -12,7 +11,6 @@ namespace SchoolProSite.DAL.Interfaces
         List<Department> GetDepartments();
         List<Department> GetDepartments(Func<Department, bool> filter);
         bool ExistsDepartment(Func<Department, bool> filter);
-
-       
+      
     }
 }

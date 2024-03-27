@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SchoolProSite.DAL.Context;
 using SchoolProSite.DAL.Entities;
 using SchoolProSite.DAL.Enums;
@@ -26,11 +24,14 @@ namespace SchoolProSite.DAL.Dao
         public Department GetDepartment(int Id)
         {
             return this.context.Departments.Find(Id);
+                        
         }
 
         public List<Department> GetDepartments()
         {
-            return this.context.Departments.ToList();
+            return this.context.Departments.Where(depto => depto.Deleted == false)
+                               .OrderByDescending(depto => depto.CreationDate)
+                               .ToList();
         }
 
         public List<Department> GetDepartments(Func<Department, bool> filter)
@@ -69,10 +70,12 @@ namespace SchoolProSite.DAL.Dao
             string message = string.Empty;
 
             if (!IsDepartmentValid(department, ref message, Operations.Update))
-                throw new DaoDepartmentException(message);
-
+                throw new DaoDepartmentException("El departamento no se encuentra registrado");
 
             Department departmentToUpdate = this.GetDepartment(department.DepartmentId);
+
+            if(departmentToUpdate is null) 
+                throw new DaoDepartmentException(message);
 
             departmentToUpdate.ModifyDate = department.ModifyDate;
             departmentToUpdate.Name = department.Name;
@@ -80,6 +83,7 @@ namespace SchoolProSite.DAL.Dao
             departmentToUpdate.Budget = department.Budget;
             departmentToUpdate.Administrator = department.Administrator;
             departmentToUpdate.UserMod = department.UserMod;
+            departmentToUpdate.DepartmentId= department.DepartmentId;
 
 
             this.context.Departments.Update(departmentToUpdate);
@@ -108,6 +112,7 @@ namespace SchoolProSite.DAL.Dao
                 return result;
             }
 
+
             if (operations == Operations.Save)
             {
                 if (this.ExistsDepartment(cd => cd.Name == department.Name))
@@ -115,11 +120,13 @@ namespace SchoolProSite.DAL.Dao
                     message = "El departamento ya encuentra registrado";
                     return result;
                 }
-
+                else
+                {
+                    result = true;
+                }
             }
             else
                 result = true;
-
 
             return result;
         }

@@ -1,15 +1,10 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SchoolProSite.DAL.Entities
 {
     public partial class Person
     {
-        public Person()
-        {
-            StudentGrades = new HashSet<StudentGrade>();
-            Courses = new HashSet<Course>();
-        }
-
+        [Key]
         public int PersonId { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
